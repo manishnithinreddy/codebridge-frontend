@@ -1,4 +1,71 @@
-/* You can add global styles to this file, and also import other style files */
+// Import a pre-built theme.
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// Import other global SCSS files or define global styles below.
+
+/* Global styles (independent of custom Material theme functions) */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+.page-container { padding: 20px; }
+
+.loading-indicator, .error-indicator, .empty-message {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 20px; margin-top: 20px;
+  font-style: italic; gap: 10px; text-align: center;
+}
+
+/* Removed mat.get-theme-color for now to avoid SASS function errors */
+.error-indicator {
+  color: red; /* Fallback color */
+  /* mat-icon if used should be styled directly or via a more direct CSS approach if needed */
+}
+.error-indicator mat-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+}
+
+.empty-message {
+  color: #757575; /* Fallback muted color (grey.600) */
+}
+.full-width-message { width: 100%; }
+.full-width-grid-message { grid-column: 1 / -1; width: 100%; }
+.action-button { margin-left: 8px !important; }
+.action-button:first-child { margin-left: 0 !important; }
+.table-container { margin-top: 16px; overflow-x: auto; mat-table { width: 100%; } }
+
+/* Consistent padding for Material table cells - these are CSS, not SASS fn based */
+th.mat-mdc-header-cell, td.mat-mdc-cell, td.mat-mdc-footer-cell { /* Updated for MDC class names */
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
+th.mat-mdc-header-cell:first-of-type, td.mat-mdc-cell:first-of-type, td.mat-mdc-footer-cell:first-of-type {
+    padding-left: 24px !important;
+}
+th.mat-mdc-header-cell:last-of-type, td.mat-mdc-cell:last-of-type, td.mat-mdc-footer-cell:last-of-type {
+    padding-right: 24px !important;
+}
+
+.entity-card {
+  margin-bottom: 16px; display: flex; flex-direction: column;
+  mat-card-header { padding-bottom: 8px; }
+  mat-card-content { flex-grow: 1; padding-top: 8px; padding-bottom: 8px; }
+  mat-card-actions { padding-top: 8px !important; margin-top: auto; }
+}
+.tab-content-padding { padding: 20px; }
+.spacer { flex: 1 1 auto; }
+
+/* Status colors - using direct CSS colors */
+.status-online, .status-running { color: green; font-weight: bold; }
+.status-offline, .status-exited, .status-failure { color: red; font-weight: bold; }
+.status-unknown, .status-pending, .status-created { color: orange; font-weight: bold; }
+.status-info { color: blue; font-weight: bold; }

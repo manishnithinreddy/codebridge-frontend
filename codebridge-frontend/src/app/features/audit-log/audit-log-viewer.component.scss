@@ -1,0 +1,14 @@
+.audit-log-container { }
+.filter-form { display: flex; flex-wrap: wrap; gap: 15px; padding: 15px 20px; align-items: center; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0; }
+.filter-form mat-form-field { flex: 1 1 200px; }
+.table-container { margin: 20px; overflow-x: auto; }
+table { width: 100%; }
+.loading-indicator, .error-indicator, .empty-message { display: flex; align-items: center; justify-content: center; padding: 20px; font-style: italic; gap: 10px; }
+.error-indicator { color: red; }
+.spacer { flex: 1 1 auto; }
+.status-success { color: green; }
+.status-failure { color: red; }
+.status-info { color: blue; }
+.status-pending { color: orange; }
+th.mat-header-cell, td.mat-cell { padding-right: 10px !important; }
+tr.mat-row.empty-message td { text-align: center; }
