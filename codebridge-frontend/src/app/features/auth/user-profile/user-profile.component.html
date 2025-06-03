@@ -1,0 +1,45 @@
+<div class="profile-container">
+  <ng-container *ngIf="currentUser$ | async as user; else loadingOrError">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>User Profile</mat-card-title>
+        <mat-card-subtitle>{{ user.username }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list role="list">
+          <mat-list-item role="listitem">
+            <mat-icon matListItemIcon>email</mat-icon>
+            <div matListItemTitle>Email</div>
+            <div matListItemLine>{{ user.email }}</div>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <mat-icon matListItemIcon>assignment_ind</mat-icon>
+            <div matListItemTitle>User ID</div>
+            <div matListItemLine>{{ user.id }}</div>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <mat-icon matListItemIcon>verified_user</mat-icon>
+            <div matListItemTitle>Roles</div>
+            <div matListItemLine>
+              <span *ngFor="let role of user.roles; let last = last">
+                {{ role }}{{ !last ? ', ' : '' }}
+              </span>
+              <span *ngIf="!user.roles || user.roles.length === 0">No roles assigned</span>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+  <ng-template #loadingOrError>
+    <ng-container *ngIf="!(authService.isAuthenticated$ | async); else loading">
+       <p>Please log in to view your profile.</p>
+    </ng-container>
+    <ng-template #loading>
+      <div class="spinner-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading profile...</p>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

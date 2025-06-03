@@ -1,0 +1,32 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a mat-list-item routerLink="/some-feature" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Some Feature</a>
+      <a mat-list-item routerLink="/api-tester" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">API Tester</a>
+<a mat-list-item routerLink="/server-management" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Server Management</a>
+<a mat-list-item routerLink="/docker-management" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Docker Management</a>
+<a mat-list-item routerLink="/git-management" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Git Repositories</a>
+<a mat-list-item routerLink="/organization" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Teams & Org</a>
+<a mat-list-item routerLink="/server-management" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Server Management</a>
+<a mat-list-item routerLink="/docker-management" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Docker Management</a>
+<a mat-list-item routerLink="/git-management" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Git Repositories</a>
+<a mat-list-item routerLink="/organization" routerLinkActive="active-link" *ngIf="authService.isAuthenticated$ | async">Teams & Org</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async"> <mat-icon aria-label="Side nav toggle icon">menu</mat-icon> </button>
+      <span>CodeBridge</span>
+      <span class="spacer"></span>
+      <ng-container *ngIf="authService.isAuthenticated$ | async; else showLoginButton">
+        <button mat-button [matMenuTriggerFor]="userMenu"><mat-icon>account_circle</mat-icon> {{ (authService.currentUser$ | async)?.username || 'User' }}</button>
+<button mat-menu-item routerLink="/auth/profile"><mat-icon>account_box</mat-icon><span>Profile</span></button>
+        <mat-menu #userMenu="matMenu"><button mat-menu-item (click)="logout()"><mat-icon>exit_to_app</mat-icon><span>Logout</span></button></mat-menu>
+      </ng-container>
+      <ng-template #showLoginButton><button mat-button routerLink="/login">Login</button></ng-template>
+    </mat-toolbar>
+    <div class="main-content"><router-outlet></router-outlet></div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
