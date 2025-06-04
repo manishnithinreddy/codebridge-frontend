@@ -1,25 +1,11 @@
+/**
+ * Base interface for API test data
+ */
 export interface ApiTest {
-  id?: string;
   name: string;
   description?: string;
-  url: string;
   method: string;
-  headers?: Record<string, string>;
-  requestBody?: string;
-  expectedStatusCode?: number;
-  expectedResponseBody?: string;
-  validationScript?: string;
-  timeoutMs: number;
-  active?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface ApiTestRequest {
-  name: string;
-  description?: string;
   url: string;
-  method: string;
   headers?: Record<string, string>;
   requestBody?: string;
   expectedStatusCode?: number;
@@ -28,32 +14,35 @@ export interface ApiTestRequest {
   timeoutMs: number;
 }
 
-export interface ApiTestResponse {
+/**
+ * Interface for creating or updating an API test
+ */
+export interface ApiTestRequest extends ApiTest {
+  // Additional fields specific to requests can be added here
+}
+
+/**
+ * Interface for API test response from the server
+ */
+export interface ApiTestResponse extends ApiTest {
   id: string;
-  name: string;
-  description?: string;
-  url: string;
-  method: string;
-  headers?: Record<string, string>;
-  requestBody?: string;
-  expectedStatusCode?: number;
-  expectedResponseBody?: string;
-  validationScript?: string;
-  timeoutMs: number;
-  active: boolean;
   createdAt: string;
   updatedAt: string;
+  userId: string;
 }
 
+/**
+ * Interface for test execution results
+ */
 export interface TestResultResponse {
   id: string;
   testId: string;
   status: string;
   responseStatusCode?: number;
-  responseHeaders?: Record<string, string>;
   responseBody?: string;
-  errorMessage?: string;
+  responseHeaders?: Record<string, string>;
   executionTimeMs?: number;
+  errorMessage?: string;
   createdAt: string;
 }
 

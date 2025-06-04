@@ -3,6 +3,9 @@ import { Observable } from 'rxjs';
 import { ApiService } from '../../../core/http/api.service';
 import { ApiTestRequest, ApiTestResponse, TestResultResponse } from '../models/api-test.model';
 
+/**
+ * Service for managing API tests
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -49,7 +52,7 @@ export class ApiTestService {
    * Execute an API test
    */
   executeTest(id: string): Observable<TestResultResponse> {
-    return this.apiService.post<TestResultResponse>(`${this.API_PATH}/${id}/execute`);
+    return this.apiService.post<TestResultResponse>(`${this.API_PATH}/${id}/execute`, {});
   }
 
   /**

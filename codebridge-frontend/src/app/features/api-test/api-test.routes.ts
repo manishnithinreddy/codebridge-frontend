@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { ApiTestRunnerComponent } from './api-test-runner.component';
-import { ApiTestListComponent } from './api-test-list.component';
-import { ApiTestFormComponent } from './api-test-form.component';
-import { ApiTestRunComponent } from './api-test-run.component';
+import { ApiTestRunnerComponent } from './api-test-runner/api-test-runner.component';
+import { ApiTestListComponent } from './api-test-list/api-test-list.component';
+import { ApiTestFormComponent } from './api-test-form/api-test-form.component';
+import { ApiTestRunComponent } from './api-test-run/api-test-run.component';
 
 export const API_TEST_ROUTES: Routes = [
   {
@@ -31,3 +31,4 @@ export const API_TEST_ROUTES: Routes = [
     title: 'CodeBridge - Run API Test'
   }
 ];
+
