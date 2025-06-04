@@ -3,7 +3,9 @@ import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/comm
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+// Update the API base URL to point to the API gateway or directly to the API test service
+// This can be configured based on the environment
+const API_BASE_URL = 'http://localhost:8082/api';
 
 interface RequestOptionsBase {
   headers?: HttpHeaders;
