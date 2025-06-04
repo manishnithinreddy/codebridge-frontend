@@ -4,8 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export interface ConfirmDialogData {
   title: string;
   message: string;
-  confirmButtonText?: string;
+  confirmButtonText: string;
   cancelButtonText?: string;
+  color?: 'primary' | 'accent' | 'warn';
 }
 
 @Component({
@@ -14,22 +15,27 @@ export interface ConfirmDialogData {
   styleUrls: ['./confirm-dialog.component.scss']
 })
 export class ConfirmDialogComponent {
-
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData
-  ) { }
+  ) {
+    // Set default values if not provided
+    this.data = {
+      ...{
+        title: 'Confirm Action',
+        message: 'Are you sure you want to proceed?',
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        color: 'primary'
+      },
+      ...data
+    };
+  }
 
-  /**
-   * Close the dialog with a negative response
-   */
   onCancel(): void {
     this.dialogRef.close(false);
   }
 
-  /**
-   * Close the dialog with a positive response
-   */
   onConfirm(): void {
     this.dialogRef.close(true);
   }
