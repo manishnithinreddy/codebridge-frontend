@@ -1,0 +1,118 @@
+<div class="api-test-form-container">
+  <h1>{{ isEditMode ? 'Edit API Test' : 'Create API Test' }}</h1>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <form [formGroup]="testForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Test Name</mat-label>
+        <input matInput formControlName="name" placeholder="Enter test name">
+        <mat-error *ngIf="testForm.get('name')?.hasError('required')">
+          Name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" placeholder="Enter test description" rows="2"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="method-select">
+        <mat-label>Method</mat-label>
+        <mat-select formControlName="method">
+          <mat-option *ngFor="let method of httpMethods" [value]="method">
+            {{ method }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="testForm.get('method')?.hasError('required')">
+          Method is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="url-input">
+        <mat-label>URL</mat-label>
+        <input matInput formControlName="url" placeholder="Enter request URL">
+        <mat-error *ngIf="testForm.get('url')?.hasError('required')">
+          URL is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="Headers">
+        <div formArrayName="headers" class="params-headers-table">
+          <div *ngFor="let header of headers.controls; let i=index" [formGroupName]="i" class="table-row">
+            <mat-form-field appearance="outline" class="key-input">
+              <input matInput formControlName="key" placeholder="Key">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="value-input">
+              <input matInput formControlName="value" placeholder="Value">
+            </mat-form-field>
+            <button type="button" mat-icon-button (click)="removeHeader(i)" aria-label="Remove header">
+              <mat-icon>remove_circle_outline</mat-icon>
+            </button>
+          </div>
+          <button type="button" mat-stroked-button (click)="addHeader()">
+            <mat-icon>add</mat-icon> Add Header
+          </button>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Request Body">
+        <mat-form-field appearance="outline" class="body-textarea">
+          <mat-label>Request Body (JSON)</mat-label>
+          <textarea matInput formControlName="requestBody" rows="10" placeholder="Enter JSON body"></textarea>
+        </mat-form-field>
+      </mat-tab>
+
+      <mat-tab label="Expected Response">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="status-code-input">
+            <mat-label>Expected Status Code</mat-label>
+            <input matInput type="number" formControlName="expectedStatusCode" placeholder="e.g., 200">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="body-textarea">
+          <mat-label>Expected Response Body (JSON)</mat-label>
+          <textarea matInput formControlName="expectedResponseBody" rows="10" placeholder="Enter expected JSON response"></textarea>
+        </mat-form-field>
+      </mat-tab>
+
+      <mat-tab label="Validation">
+        <mat-form-field appearance="outline" class="body-textarea">
+          <mat-label>Validation Script</mat-label>
+          <textarea matInput formControlName="validationScript" rows="10" placeholder="Enter validation script"></textarea>
+        </mat-form-field>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="timeout-input">
+        <mat-label>Timeout (ms)</mat-label>
+        <input matInput type="number" formControlName="timeoutMs" placeholder="e.g., 5000">
+        <mat-error *ngIf="testForm.get('timeoutMs')?.hasError('required')">
+          Timeout is required
+        </mat-error>
+        <mat-error *ngIf="testForm.get('timeoutMs')?.hasError('min')">
+          Timeout must be at least 1000 ms
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" mat-button (click)="cancel()">Cancel</button>
+      <button type="submit" mat-raised-button color="primary" [disabled]="testForm.invalid || isSaving">
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div>
+

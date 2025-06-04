@@ -1,5 +1,10 @@
 <div class="api-tester-container" [formGroup]="requestForm">
-  <h1>API Test Runner</h1>
+  <div class="header-actions">
+    <h1>Manual API Test Runner</h1>
+    <button mat-button (click)="navigateToTests()">
+      <mat-icon>arrow_back</mat-icon> Back to Tests
+    </button>
+  </div>
 
   <div class="request-bar">
     <mat-form-field appearance="outline" class="method-select">
@@ -16,7 +21,9 @@
       <input matInput formControlName="url" placeholder="Enter request URL">
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="sendRequest()" class="send-button">Send</button>
+    <button mat-raised-button color="primary" (click)="sendRequest()" [disabled]="isLoading" class="send-button">
+      <mat-icon>send</mat-icon> Send
+    </button>
   </div>
 
   <mat-tab-group animationDuration="0ms">
@@ -66,6 +73,11 @@
     </mat-tab>
   </mat-tab-group>
 
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="30"></mat-spinner>
+    <span>Sending request...</span>
+  </div>
+
   <div class="response-section" *ngIf="requestForm.get('responseStatus')?.value">
     <h2>Response</h2>
     <div><strong>Status:</strong> {{ requestForm.get('responseStatus')?.value }}</div>
@@ -80,3 +92,4 @@
     </mat-tab-group>
   </div>
 </div>
+

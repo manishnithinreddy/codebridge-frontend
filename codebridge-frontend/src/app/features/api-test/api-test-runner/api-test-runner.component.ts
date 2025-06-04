@@ -10,17 +10,27 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpParams, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { ApiService } from '../../core/http/api.service'; // Corrected path
+import { ApiService } from '../../../core/http/api.service';
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-api-test-runner',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, MatTabsModule, MatFormFieldModule,
-    MatInputModule, MatSelectModule, MatButtonModule, MatTableModule,
-    MatIconModule, MatProgressSpinnerModule
+    CommonModule, 
+    ReactiveFormsModule, 
+    MatTabsModule, 
+    MatFormFieldModule,
+    MatInputModule, 
+    MatSelectModule, 
+    MatButtonModule, 
+    MatTableModule,
+    MatIconModule, 
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   templateUrl: './api-test-runner.component.html',
   styleUrls: ['./api-test-runner.component.scss']
@@ -32,6 +42,8 @@ export class ApiTestRunnerComponent {
 
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   constructor() {
     this.requestForm = this.fb.group({
@@ -53,6 +65,10 @@ export class ApiTestRunnerComponent {
   get headers() { return this.requestForm.get('headers') as FormArray; }
   addHeader() { this.headers.push(this.fb.group({ key: [''], value: [''] })); }
   removeHeader(index: number) { this.headers.removeAt(index); }
+
+  navigateToTests(): void {
+    this.router.navigate(['/api-tester']);
+  }
 
   sendRequest() {
     if (this.requestForm.invalid) {
@@ -89,6 +105,7 @@ export class ApiTestRunnerComponent {
           responseStatus: 'Error: Invalid JSON Body',
           responseBody: 'The provided request body is not valid JSON.',
         });
+        this.showErrorMessage('Invalid JSON in request body');
         return;
       }
     }
@@ -103,11 +120,12 @@ export class ApiTestRunnerComponent {
       case 'PUT':     response$ = this.apiService.put(url, requestBody, options); break;
       case 'DELETE':  response$ = this.apiService.delete(url, options); break;
       case 'PATCH':   response$ = this.apiService.patch(url, requestBody, options); break;
-      case 'HEAD':    response$ = this.apiService.head(url, { params: httpParams, headers: httpHeaders }); break; // Omit observe from options for HEAD/OPTIONS
-      case 'OPTIONS': response$ = this.apiService.options(url, { params: httpParams, headers: httpHeaders }); break; // Omit observe from options for HEAD/OPTIONS
+      case 'HEAD':    response$ = this.apiService.head(url, { params: httpParams, headers: httpHeaders }); break;
+      case 'OPTIONS': response$ = this.apiService.options(url, { params: httpParams, headers: httpHeaders }); break;
       default:
         this.isLoading = false;
         this.requestForm.patchValue({ responseStatus: 'Error: Unsupported method' });
+        this.showErrorMessage('Unsupported HTTP method');
         return;
     }
 
@@ -119,6 +137,7 @@ export class ApiTestRunnerComponent {
             responseBody: JSON.stringify(res.body, null, 2),
             responseHeaders: JSON.stringify(this.parseHeaders(res.headers), null, 2)
           });
+          this.showSuccessMessage(`Request successful: ${res.status} ${res.statusText}`);
         },
         error: (err: HttpErrorResponse) => {
           this.requestForm.patchValue({
@@ -126,6 +145,7 @@ export class ApiTestRunnerComponent {
             responseBody: JSON.stringify(err.error || err.message, null, 2),
             responseHeaders: JSON.stringify(this.parseHeaders(err.headers), null, 2)
           });
+          this.showErrorMessage(`Request failed: ${err.status} ${err.statusText}`);
         }
       });
   }
@@ -135,4 +155,23 @@ export class ApiTestRunnerComponent {
     headers.keys().forEach(key => { result[key] = headers.getAll(key)?.join(', '); });
     return result;
   }
+
+  private showSuccessMessage(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['success-snackbar']
+    });
+  }
+
+  private showErrorMessage(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+      panelClass: ['error-snackbar']
+    });
+  }
 }
+
