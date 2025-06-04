@@ -1,0 +1,127 @@
+<div class="collection-form-container">
+  <div class="header-container">
+    <div class="header-left">
+      <button mat-icon-button (click)="onCancel()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ isEditMode ? 'Edit' : 'Create' }} Collection {{ project?.name ? 'for ' + project.name : '' }}</h1>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <mat-card>
+      <mat-card-content>
+        <div *ngIf="loading" class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading collection data...</p>
+        </div>
+
+        <div *ngIf="error" class="error-container">
+          <mat-icon color="warn">error</mat-icon>
+          <p>{{ error }}</p>
+          <button mat-button color="primary" (click)="loadCollection(projectId, collectionId!)">Retry</button>
+        </div>
+
+        <form [formGroup]="collectionForm" (ngSubmit)="onSubmit()" *ngIf="!loading && !error">
+          <mat-tab-group>
+            <mat-tab label="Basic Information">
+              <div class="tab-content">
+                <div class="form-field">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Collection Name</mat-label>
+                    <input matInput formControlName="name" placeholder="Enter collection name" required>
+                    <mat-error *ngIf="collectionForm.get('name')?.hasError('required')">
+                      Collection name is required
+                    </mat-error>
+                    <mat-error *ngIf="collectionForm.get('name')?.hasError('maxlength')">
+                      Collection name cannot exceed 255 characters
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-field">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="description" placeholder="Enter collection description" rows="4"></textarea>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-field">
+                  <mat-slide-toggle formControlName="shared" color="primary">
+                    Share this collection with other users
+                  </mat-slide-toggle>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Variables">
+              <div class="tab-content">
+                <div class="variables-container">
+                  <div class="variables-header">
+                    <h3>Collection Variables</h3>
+                    <button mat-mini-fab color="primary" type="button" (click)="addVariable()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+
+                  <div class="variables-list" formGroupName="variables">
+                    <div *ngIf="variableKeys.length === 0" class="empty-variables">
+                      <p>No variables defined. Click the + button to add a variable.</p>
+                    </div>
+
+                    <div *ngFor="let key of variableKeys" class="variable-item">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Key</mat-label>
+                        <input matInput [value]="key" readonly>
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline">
+                        <mat-label>Value</mat-label>
+                        <input matInput [formControlName]="key">
+                      </mat-form-field>
+
+                      <button mat-icon-button color="warn" type="button" (click)="removeVariable(key)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Scripts">
+              <div class="tab-content">
+                <div class="form-field">
+                  <h3>Pre-request Script</h3>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <textarea matInput formControlName="preRequestScript" placeholder="Enter pre-request script" rows="10"></textarea>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-field">
+                  <h3>Post-request Script</h3>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <textarea matInput formControlName="postRequestScript" placeholder="Enter post-request script" rows="10"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="onCancel()">Cancel</button>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              type="submit" 
+              [disabled]="collectionForm.invalid || submitting">
+              <mat-spinner diameter="20" *ngIf="submitting"></mat-spinner>
+              <span *ngIf="!submitting">{{ isEditMode ? 'Update' : 'Create' }}</span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
