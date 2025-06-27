@@ -1,0 +1,23 @@
+.docker-dashboard-container {}
+.tab-content-padding { padding: 20px; }
+.entity-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 16px; margin-top: 16px; }
+.entity-card {}
+mat-card-header .mat-icon.mat-card-avatar { font-size: 40px; width: 40px; height: 40px; line-height: 40px; text-align: center; }
+.status-running { color: green; }
+.status-exited { color: gray; }
+.spacer { flex: 1 1 auto; }
+
+.loading-indicator, .error-indicator, .empty-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-style: italic;
+  gap: 10px;
+}
+.error-indicator {
+  color: red;
+}
+.spacer {
+  flex: 1 1 auto;
+}

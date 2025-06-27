@@ -1,0 +1,77 @@
+<div class="audit-log-container">
+  <mat-toolbar color="accent">
+    <span>Audit Log Viewer</span>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="loadAuditLogs()" matTooltip="Refresh Logs">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <form [formGroup]="filterForm" class="filter-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Filter by User Name</mat-label>
+      <input matInput formControlName="userName" placeholder="e.g., Alice">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Filter by Action</mat-label>
+      <input matInput formControlName="action" placeholder="e.g., user_login_success">
+    </mat-form-field>
+     <mat-form-field appearance="outline">
+      <mat-label>Filter by Status</mat-label>
+      <input matInput formControlName="status" placeholder="e.g., SUCCESS">
+    </mat-form-field>
+    <button mat-stroked-button type="button" (click)="clearFilters()">Clear Filters</button>
+  </form>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner> <span>Loading audit logs...</span>
+  </div>
+  <div *ngIf="error" class="error-indicator">{{error}}</div>
+
+  <div *ngIf="!isLoading && !error" class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2">
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Timestamp </th>
+        <td mat-cell *matCellDef="let log"> {{log.timestamp | date:'medium'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="userName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
+        <td mat-cell *matCellDef="let log"> {{log.userName || log.userId || 'N/A'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="serviceName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Service </th>
+        <td mat-cell *matCellDef="let log"> {{log.serviceName || 'N/A'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+        <td mat-cell *matCellDef="let log"> {{log.action}} </td>
+      </ng-container>
+      <ng-container matColumnDef="entityName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Entity </th>
+        <td mat-cell *matCellDef="let log"> {{log.entityName || log.entityType || 'N/A'}} <small *ngIf="log.entityId">({{log.entityId}})</small></td>
+      </ng-container>
+       <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let log" [ngClass]="'status-' + log.status.toLowerCase()"> {{log.status}} </td>
+      </ng-container>
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef> Details </th>
+        <td mat-cell *matCellDef="let log">
+          <button mat-icon-button *ngIf="log.details" (click)="viewDetails(log)" matTooltip="View Details">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length" class="empty-message">
+          No audit logs found matching your criteria.
+        </td>
+      </tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

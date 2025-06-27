@@ -1,0 +1,20 @@
+<div class="server-dashboard-container">
+  <mat-toolbar color="accent">
+    <span>Server Management Dashboard</span>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="loadServers()" aria-label="Refresh server list">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </mat-toolbar>
+  <div *ngIf="isLoading" class="loading-container"><mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner><p>Loading servers...</p></div>
+  <div *ngIf="error" class="error-container"><mat-icon color="warn">error_outline</mat-icon><p>{{ error }}</p><button mat-stroked-button (click)="loadServers()">Try Again</button></div>
+  <div *ngIf="!isLoading && !error && (servers$ | async) as servers" class="server-list">
+    <mat-card *ngFor="let server of servers" class="server-card">
+      <mat-card-header><mat-card-title>{{ server.name }}</mat-card-title><mat-card-subtitle>Status: <span [ngClass]="{'status-online': server.status?.toLowerCase() === 'online', 'status-offline': server.status?.toLowerCase() === 'offline', 'status-unknown': !server.status || (server.status.toLowerCase() !== 'online' && server.status.toLowerCase() !== 'offline')}">{{ server.status || 'Unknown' }}</span> - {{ server.hostname || 'N/A' }}</mat-card-subtitle></mat-card-header>
+      <mat-card-content><p><strong>OS:</strong> {{ server.os || 'N/A' }}</p></mat-card-content>
+      <mat-card-actions align="end"><button mat-button (click)="viewServerDetails(server.id)">Details</button><button mat-button color="primary" (click)="openTerminal(server.id)">Terminal</button><button mat-button color="primary" (click)="openFileManager(server.id)">File Manager</button></mat-card-actions>
+    </mat-card>
+    <p *ngIf="servers.length === 0" class="no-servers-message">No servers found.</p>
+  </div>
+  <div *ngIf="!isLoading && !error && !(servers$ | async)" class="no-servers-message">No server data available.</div>
+</div>

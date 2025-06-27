@@ -1,0 +1,11 @@
+.server-dashboard-container { padding: 0; }
+mat-toolbar { margin-bottom: 20px; }
+.server-list { padding: 0 20px 20px 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.status-online { color: green; font-weight: bold; }
+.status-offline { color: red; font-weight: bold; }
+.no-servers-message { text-align: center; font-style: italic; margin-top: 20px; grid-column: 1 / -1; }
+mat-card-actions { padding-top: 8px; }
+.loading-container, .error-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+.error-container mat-icon { font-size: 48px; width: 48px; height: 48px; margin-bottom: 16px; }
+.error-container p { margin-bottom: 16px; }
+.spacer { flex: 1 1 auto; }

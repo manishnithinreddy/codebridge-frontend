@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'identity-platform'
+    metrics_path: '/identity/actuator/prometheus'
+    static_configs:
+      - targets: ['identity-platform:8081']
+
+  - job_name: 'teams-service'
+    metrics_path: '/teams/actuator/prometheus'
+    static_configs:
+      - targets: ['teams-service:8082']
+
+  - job_name: 'monitoring-service'
+    metrics_path: '/monitoring/actuator/prometheus'
+    static_configs:
+      - targets: ['monitoring-service:8083']
+      
+  - job_name: 'documentation-service'
+    metrics_path: '/api/docs/actuator/prometheus'
+    static_configs:
+      - targets: ['documentation-service:8087']
