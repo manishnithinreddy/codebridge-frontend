@@ -25,7 +25,7 @@ import {
   providedIn: 'root'
 })
 export class DockerService extends BaseApiService {
-  private readonly SERVICE_PATH = '/docker';
+  protected override readonly baseUrl = '/api/docker';
 
   // Container Management
   
@@ -35,7 +35,7 @@ export class DockerService extends BaseApiService {
   getContainers(showAll: boolean = false): Observable<ContainerInfo[]> {
     const params = this.buildParams({ showAll });
     return this.get<ContainerInfo[]>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/containers'),
+      '/containers',
       params
     );
   }
@@ -45,7 +45,7 @@ export class DockerService extends BaseApiService {
    */
   getContainer(id: string): Observable<ContainerInfo> {
     return this.get<ContainerInfo>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}`)
+      `/containers/${id}`
     );
   }
 
@@ -54,7 +54,7 @@ export class DockerService extends BaseApiService {
    */
   createContainer(request: ContainerCreateRequest): Observable<ContainerInfo> {
     return this.post<ContainerInfo>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/containers'),
+      '/containers',
       request
     );
   }
@@ -64,7 +64,7 @@ export class DockerService extends BaseApiService {
    */
   updateContainer(id: string, request: ContainerUpdateRequest): Observable<ContainerInfo> {
     return this.put<ContainerInfo>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}`),
+      `/containers/${id}`),
       request
     );
   }
@@ -74,7 +74,7 @@ export class DockerService extends BaseApiService {
    */
   startContainer(id: string): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/start`),
+      `/containers/${id}/start`),
       {}
     );
   }
@@ -85,7 +85,7 @@ export class DockerService extends BaseApiService {
   stopContainer(id: string, timeout?: number): Observable<void> {
     const params = timeout ? this.buildParams({ timeout }) : undefined;
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/stop`),
+      `/containers/${id}/stop`),
       {},
       undefined
     );
@@ -97,7 +97,7 @@ export class DockerService extends BaseApiService {
   restartContainer(id: string, timeout?: number): Observable<void> {
     const params = timeout ? this.buildParams({ timeout }) : undefined;
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/restart`),
+      `/containers/${id}/restart`),
       {}
     );
   }
@@ -107,7 +107,7 @@ export class DockerService extends BaseApiService {
    */
   pauseContainer(id: string): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/pause`),
+      `/containers/${id}/pause`),
       {}
     );
   }
@@ -117,7 +117,7 @@ export class DockerService extends BaseApiService {
    */
   unpauseContainer(id: string): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/unpause`),
+      `/containers/${id}/unpause`),
       {}
     );
   }
@@ -128,7 +128,7 @@ export class DockerService extends BaseApiService {
   removeContainer(id: string, force: boolean = false, removeVolumes: boolean = false): Observable<void> {
     const params = this.buildParams({ force, removeVolumes });
     return this.delete<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}?${params.toString()}`)
+      `/containers/${id}?${params.toString()}`)
     );
   }
 
@@ -137,7 +137,7 @@ export class DockerService extends BaseApiService {
    */
   execContainer(id: string, request: ContainerExecRequest): Observable<ContainerExecResponse> {
     return this.post<ContainerExecResponse>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/exec`),
+      `/containers/${id}/exec`),
       request
     );
   }
@@ -154,7 +154,7 @@ export class DockerService extends BaseApiService {
   ): Observable<ContainerLogs> {
     const params = this.buildParams({ follow, tail, since, until });
     return this.get<ContainerLogs>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/logs`),
+      `/containers/${id}/logs`),
       params
     );
   }
@@ -165,7 +165,7 @@ export class DockerService extends BaseApiService {
   getContainerStats(id: string, stream: boolean = false): Observable<ContainerStats> {
     const params = this.buildParams({ stream });
     return this.get<ContainerStats>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/stats`),
+      `/containers/${id}/stats`),
       params
     );
   }
@@ -175,7 +175,7 @@ export class DockerService extends BaseApiService {
    */
   renameContainer(id: string, newName: string): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/containers/${id}/rename`),
+      `/containers/${id}/rename`),
       { name: newName }
     );
   }
@@ -188,7 +188,7 @@ export class DockerService extends BaseApiService {
   getImages(showAll: boolean = false): Observable<DockerImage[]> {
     const params = this.buildParams({ showAll });
     return this.get<DockerImage[]>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/images'),
+      '/images',
       params
     );
   }
@@ -198,7 +198,7 @@ export class DockerService extends BaseApiService {
    */
   getImage(id: string): Observable<DockerImage> {
     return this.get<DockerImage>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/images/${id}`)
+      `/images/${id}`)
     );
   }
 
@@ -207,7 +207,7 @@ export class DockerService extends BaseApiService {
    */
   pullImage(imageName: string, tag: string = 'latest'): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/images/pull'),
+      '/images/pull',
       { image: imageName, tag }
     );
   }
@@ -217,7 +217,7 @@ export class DockerService extends BaseApiService {
    */
   pushImage(imageName: string, tag: string = 'latest'): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/images/push'),
+      '/images/push',
       { image: imageName, tag }
     );
   }
@@ -227,7 +227,7 @@ export class DockerService extends BaseApiService {
    */
   buildImage(request: ImageBuildRequest): Observable<ImageBuildResponse> {
     return this.post<ImageBuildResponse>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/images/build'),
+      '/images/build',
       request
     );
   }
@@ -238,7 +238,7 @@ export class DockerService extends BaseApiService {
   removeImage(id: string, force: boolean = false, noPrune: boolean = false): Observable<void> {
     const params = this.buildParams({ force, noPrune });
     return this.delete<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/images/${id}?${params.toString()}`)
+      `/images/${id}?${params.toString()}`)
     );
   }
 
@@ -247,7 +247,7 @@ export class DockerService extends BaseApiService {
    */
   tagImage(id: string, repository: string, tag: string): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/images/${id}/tag`),
+      `/images/${id}/tag`),
       { repository, tag }
     );
   }
@@ -258,7 +258,7 @@ export class DockerService extends BaseApiService {
   searchImages(term: string, limit: number = 25): Observable<any[]> {
     const params = this.buildParams({ term, limit });
     return this.get<any[]>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/images/search'),
+      '/images/search',
       params
     );
   }
@@ -268,7 +268,7 @@ export class DockerService extends BaseApiService {
    */
   getImageHistory(id: string): Observable<any[]> {
     return this.get<any[]>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/images/${id}/history`)
+      `/images/${id}/history`)
     );
   }
 
@@ -279,7 +279,7 @@ export class DockerService extends BaseApiService {
    */
   getRegistries(): Observable<DockerRegistry[]> {
     return this.get<DockerRegistry[]>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/registries')
+      '/registries')
     );
   }
 
@@ -288,7 +288,7 @@ export class DockerService extends BaseApiService {
    */
   getRegistry(id: string): Observable<DockerRegistry> {
     return this.get<DockerRegistry>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/registries/${id}`)
+      `/registries/${id}`)
     );
   }
 
@@ -297,7 +297,7 @@ export class DockerService extends BaseApiService {
    */
   createRegistry(registry: Omit<DockerRegistry, 'id' | 'createdAt' | 'updatedAt'>): Observable<DockerRegistry> {
     return this.post<DockerRegistry>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/registries'),
+      '/registries',
       registry
     );
   }
@@ -307,7 +307,7 @@ export class DockerService extends BaseApiService {
    */
   updateRegistry(id: string, registry: Partial<DockerRegistry>): Observable<DockerRegistry> {
     return this.put<DockerRegistry>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/registries/${id}`),
+      `/registries/${id}`),
       registry
     );
   }
@@ -317,7 +317,7 @@ export class DockerService extends BaseApiService {
    */
   deleteRegistry(id: string): Observable<void> {
     return this.delete<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/registries/${id}`)
+      `/registries/${id}`)
     );
   }
 
@@ -326,7 +326,7 @@ export class DockerService extends BaseApiService {
    */
   testRegistry(id: string): Observable<{ success: boolean; message?: string }> {
     return this.post<{ success: boolean; message?: string }>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/registries/${id}/test`),
+      `/registries/${id}/test`),
       {}
     );
   }
@@ -336,7 +336,7 @@ export class DockerService extends BaseApiService {
    */
   authenticateRegistry(authConfig: RegistryAuthConfig): Observable<{ success: boolean; token?: string }> {
     return this.post<{ success: boolean; token?: string }>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/auth'),
+      '/auth',
       authConfig
     );
   }
@@ -348,7 +348,7 @@ export class DockerService extends BaseApiService {
    */
   getContexts(): Observable<DockerContext[]> {
     return this.get<DockerContext[]>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/contexts')
+      '/contexts')
     );
   }
 
@@ -357,7 +357,7 @@ export class DockerService extends BaseApiService {
    */
   getCurrentContext(): Observable<DockerContext> {
     return this.get<DockerContext>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/contexts/current')
+      '/contexts/current')
     );
   }
 
@@ -366,7 +366,7 @@ export class DockerService extends BaseApiService {
    */
   createContext(context: Omit<DockerContext, 'id' | 'createdAt' | 'updatedAt'>): Observable<DockerContext> {
     return this.post<DockerContext>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/contexts'),
+      '/contexts',
       context
     );
   }
@@ -376,7 +376,7 @@ export class DockerService extends BaseApiService {
    */
   updateContext(id: string, context: Partial<DockerContext>): Observable<DockerContext> {
     return this.put<DockerContext>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/contexts/${id}`),
+      `/contexts/${id}`),
       context
     );
   }
@@ -386,7 +386,7 @@ export class DockerService extends BaseApiService {
    */
   deleteContext(id: string): Observable<void> {
     return this.delete<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/contexts/${id}`)
+      `/contexts/${id}`)
     );
   }
 
@@ -395,7 +395,7 @@ export class DockerService extends BaseApiService {
    */
   switchContext(id: string): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/contexts/${id}/use`),
+      `/contexts/${id}/use`),
       {}
     );
   }
@@ -407,7 +407,7 @@ export class DockerService extends BaseApiService {
    */
   getSystemInfo(): Observable<any> {
     return this.get<any>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/system/info')
+      '/system/info')
     );
   }
 
@@ -416,7 +416,7 @@ export class DockerService extends BaseApiService {
    */
   getVersion(): Observable<any> {
     return this.get<any>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/system/version')
+      '/system/version')
     );
   }
 
@@ -425,7 +425,7 @@ export class DockerService extends BaseApiService {
    */
   ping(): Observable<{ success: boolean }> {
     return this.get<{ success: boolean }>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/system/ping')
+      '/system/ping')
     );
   }
 
@@ -435,7 +435,7 @@ export class DockerService extends BaseApiService {
   getEvents(since?: string, until?: string, filters?: Record<string, string[]>): Observable<any[]> {
     const params = this.buildParams({ since, until, filters: JSON.stringify(filters) });
     return this.get<any[]>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/system/events'),
+      '/system/events',
       params
     );
   }
@@ -445,7 +445,7 @@ export class DockerService extends BaseApiService {
    */
   pruneSystem(): Observable<{ containersDeleted: number; imagesDeleted: number; spaceReclaimed: number }> {
     return this.post<{ containersDeleted: number; imagesDeleted: number; spaceReclaimed: number }>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/system/prune'),
+      '/system/prune',
       {}
     );
   }
@@ -455,7 +455,7 @@ export class DockerService extends BaseApiService {
    */
   getDiskUsage(): Observable<any> {
     return this.get<any>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/system/df')
+      '/system/df')
     );
   }
 }

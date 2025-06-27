@@ -22,7 +22,7 @@ import {
   providedIn: 'root'
 })
 export class AuthService extends BaseApiService {
-  private readonly SERVICE_PATH = '/auth';
+  protected override readonly baseUrl = '/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
 
@@ -39,7 +39,7 @@ export class AuthService extends BaseApiService {
    */
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.post<LoginResponse>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/login'),
+      '/login',
       credentials
     ).pipe(
       tap(response => {
@@ -53,7 +53,7 @@ export class AuthService extends BaseApiService {
    */
   logout(): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/logout'),
+      '/logout',
       {}
     ).pipe(
       tap(() => {
@@ -67,7 +67,7 @@ export class AuthService extends BaseApiService {
    */
   register(userData: UserRegistrationRequest): Observable<User> {
     return this.post<User>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/register'),
+      '/register',
       userData
     );
   }
@@ -77,7 +77,7 @@ export class AuthService extends BaseApiService {
    */
   refreshToken(request: RefreshTokenRequest): Observable<LoginResponse> {
     return this.post<LoginResponse>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/refresh'),
+      '/refresh',
       request
     ).pipe(
       tap(response => {
@@ -91,7 +91,7 @@ export class AuthService extends BaseApiService {
    */
   changePassword(request: PasswordChangeRequest): Observable<void> {
     return this.post<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/change-password'),
+      '/change-password',
       request
     );
   }
@@ -101,7 +101,7 @@ export class AuthService extends BaseApiService {
    */
   getCurrentUser(): Observable<User> {
     return this.get<User>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/me')
+      '/me')
     ).pipe(
       tap(user => {
         this.currentUserSubject.next(user);
@@ -114,7 +114,7 @@ export class AuthService extends BaseApiService {
    */
   updateProfile(userData: Partial<User>): Observable<User> {
     return this.put<User>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/me'),
+      '/me',
       userData
     ).pipe(
       tap(user => {
@@ -128,7 +128,7 @@ export class AuthService extends BaseApiService {
    */
   checkPermission(request: RbacRequest): Observable<RbacResponse> {
     return this.post<RbacResponse>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/rbac/check'),
+      '/rbac/check',
       request
     );
   }
@@ -140,7 +140,7 @@ export class AuthService extends BaseApiService {
    */
   getApiKeys(): Observable<ApiKey[]> {
     return this.get<ApiKey[]>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/api-keys')
+      '/api-keys')
     );
   }
 
@@ -149,7 +149,7 @@ export class AuthService extends BaseApiService {
    */
   createApiKey(request: ApiKeyRequest): Observable<ApiKeyResponse> {
     return this.post<ApiKeyResponse>(
-      this.getServiceEndpoint(this.SERVICE_PATH, '/api-keys'),
+      '/api-keys',
       request
     );
   }
@@ -159,7 +159,7 @@ export class AuthService extends BaseApiService {
    */
   deleteApiKey(keyId: string): Observable<void> {
     return this.delete<void>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/api-keys/${keyId}`)
+      `/api-keys/${keyId}`)
     );
   }
 
@@ -168,7 +168,7 @@ export class AuthService extends BaseApiService {
    */
   toggleApiKey(keyId: string, isActive: boolean): Observable<ApiKey> {
     return this.patch<ApiKey>(
-      this.getServiceEndpoint(this.SERVICE_PATH, `/api-keys/${keyId}`),
+      `/api-keys/${keyId}`),
       { isActive }
     );
   }

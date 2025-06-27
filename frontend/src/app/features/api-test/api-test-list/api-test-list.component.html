@@ -1,0 +1,76 @@
+<div class="api-test-list-container">
+  <div class="header-actions">
+    <h1>API Tests</h1>
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" (click)="navigateToCreate()">
+        <mat-icon>add</mat-icon> Create New Test
+      </button>
+      <button mat-button (click)="navigateToManualTester()">
+        <mat-icon>code</mat-icon> Manual API Tester
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && tests.length === 0" class="no-tests">
+    <mat-card>
+      <mat-card-content>
+        <p>No API tests found. Create your first test to get started!</p>
+        <button mat-raised-button color="primary" (click)="navigateToCreate()">
+          Create New Test
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <table mat-table [dataSource]="tests" class="mat-elevation-z2" *ngIf="!isLoading && tests.length > 0">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let test">{{ test.name }}</td>
+    </ng-container>
+
+    <!-- URL Column -->
+    <ng-container matColumnDef="url">
+      <th mat-header-cell *matHeaderCellDef>URL</th>
+      <td mat-cell *matCellDef="let test" [matTooltip]="test.url">
+        {{ test.url | slice:0:50 }}{{ test.url.length > 50 ? '...' : '' }}
+      </td>
+    </ng-container>
+
+    <!-- Method Column -->
+    <ng-container matColumnDef="method">
+      <th mat-header-cell *matHeaderCellDef>Method</th>
+      <td mat-cell *matCellDef="let test">{{ test.method }}</td>
+    </ng-container>
+
+    <!-- Created At Column -->
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Created</th>
+      <td mat-cell *matCellDef="let test">{{ test.createdAt | date:'short' }}</td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let test">
+        <button mat-icon-button color="primary" matTooltip="Edit" (click)="navigateToEdit(test.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" matTooltip="Run Test" (click)="executeTest(test.id)">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" matTooltip="Delete" (click)="confirmDelete(test)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+

@@ -1,0 +1,91 @@
+.environment-list-container {
+  padding: 20px;
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h1 {
+      margin: 0;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .content-container {
+    .loading-container, .error-container, .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 0;
+      text-align: center;
+
+      mat-icon {
+        font-size: 48px;
+        height: 48px;
+        width: 48px;
+        margin-bottom: 16px;
+      }
+
+      h3 {
+        margin: 0 0 8px;
+      }
+
+      p {
+        margin: 0 0 16px;
+        color: rgba(0, 0, 0, 0.6);
+      }
+    }
+
+    table {
+      width: 100%;
+
+      .mat-column-name {
+        width: 20%;
+        
+        a {
+          color: inherit;
+          text-decoration: none;
+          font-weight: 500;
+          
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .mat-column-description {
+        width: 40%;
+      }
+
+      .mat-column-variableCount {
+        width: 10%;
+        text-align: center;
+      }
+
+      .mat-column-isDefault {
+        width: 15%;
+
+        .default-badge {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          color: #3f51b5;
+        }
+      }
+
+      .mat-column-actions {
+        width: 15%;
+        text-align: right;
+      }
+    }
+  }
+}
+

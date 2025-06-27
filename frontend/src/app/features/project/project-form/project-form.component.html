@@ -1,0 +1,57 @@
+<div class="project-form-container">
+  <div class="header-container">
+    <h1>{{ isEditMode ? 'Edit Project' : 'Create Project' }}</h1>
+  </div>
+
+  <div class="content-container">
+    <mat-card>
+      <mat-card-content>
+        <div *ngIf="loading" class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading project data...</p>
+        </div>
+
+        <div *ngIf="error" class="error-container">
+          <mat-icon color="warn">error</mat-icon>
+          <p>{{ error }}</p>
+          <button mat-button color="primary" (click)="loadProject(projectId!)">Retry</button>
+        </div>
+
+        <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" *ngIf="!loading && !error">
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Project Name</mat-label>
+              <input matInput formControlName="name" placeholder="Enter project name" required>
+              <mat-error *ngIf="projectForm.get('name')?.hasError('required')">
+                Project name is required
+              </mat-error>
+              <mat-error *ngIf="projectForm.get('name')?.hasError('maxlength')">
+                Project name cannot exceed 255 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" placeholder="Enter project description" rows="4"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="onCancel()">Cancel</button>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              type="submit" 
+              [disabled]="projectForm.invalid || submitting">
+              <mat-spinner diameter="20" *ngIf="submitting"></mat-spinner>
+              <span *ngIf="!submitting">{{ isEditMode ? 'Update' : 'Create' }}</span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
