@@ -1,0 +1,25 @@
+.organization-dashboard-container {}
+.tab-content-padding { padding: 20px; }
+.entity-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; }
+.entity-card {}
+.table-container { margin-top: 16px; overflow-x: auto; }
+table { width: 100%; }
+.empty-message, .loading-message { text-align: center; font-style: italic; padding: 20px; }
+.spacer { flex: 1 1 auto; }
+.action-button { margin-left: 8px; }
+
+.loading-indicator, .error-indicator, .empty-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-style: italic;
+  gap: 10px;
+}
+.error-indicator { color: red; }
+.spacer { flex: 1 1 auto; }
+.action-button { margin-left: 8px !important; }
+.table-container { margin-top: 16px; overflow-x: auto; }
+table { width: 100%; }
+td.mat-cell, th.mat-header-cell { padding-right: 10px !important; }
+small { color: grey; font-size: 0.8em; }

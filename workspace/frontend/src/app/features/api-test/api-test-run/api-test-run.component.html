@@ -1,0 +1,133 @@
+<div class="api-test-run-container">
+  <div class="header-actions">
+    <h1>Run API Test</h1>
+    <div>
+      <button mat-button (click)="navigateBack()">
+        <mat-icon>arrow_back</mat-icon> Back to Tests
+      </button>
+      <button mat-raised-button color="primary" (click)="runTest()" [disabled]="isRunning">
+        <mat-icon>play_arrow</mat-icon> Run Test
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!isLoading && test">
+    <mat-card class="test-details">
+      <mat-card-header>
+        <mat-card-title>{{ test.name }}</mat-card-title>
+        <mat-card-subtitle>{{ test.description }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="test-info">
+          <div class="info-row">
+            <strong>Method:</strong> {{ test.method }}
+          </div>
+          <div class="info-row">
+            <strong>URL:</strong> {{ test.url }}
+          </div>
+          <div class="info-row" *ngIf="test.headers && objectKeys(test.headers).length > 0">
+            <strong>Headers:</strong>
+            <pre>{{ test.headers | json }}</pre>
+          </div>
+          <div class="info-row" *ngIf="test.requestBody">
+            <strong>Request Body:</strong>
+            <pre>{{ formatJson(test.requestBody) }}</pre>
+          </div>
+          <div class="info-row" *ngIf="test.expectedStatusCode">
+            <strong>Expected Status:</strong> {{ test.expectedStatusCode }}
+          </div>
+          <div class="info-row" *ngIf="test.expectedResponseBody">
+            <strong>Expected Response:</strong>
+            <pre>{{ formatJson(test.expectedResponseBody) }}</pre>
+          </div>
+          <div class="info-row">
+            <strong>Timeout:</strong> {{ test.timeoutMs }} ms
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div *ngIf="isRunning" class="running-indicator">
+      <mat-spinner diameter="30"></mat-spinner>
+      <span>Running test...</span>
+    </div>
+
+    <div *ngIf="testResult" class="test-result">
+      <h2>Test Result</h2>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-chip [color]="getStatusColor(testResult.status)" selected>
+              {{ testResult.status }}
+            </mat-chip>
+            <span *ngIf="testResult.responseStatusCode" class="status-code">
+              Status: {{ testResult.responseStatusCode }}
+            </span>
+          </mat-card-title>
+          <mat-card-subtitle *ngIf="testResult.executionTimeMs">
+            Execution Time: {{ testResult.executionTimeMs }} ms
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="testResult.errorMessage" class="error-message">
+            <strong>Error:</strong> {{ testResult.errorMessage }}
+          </div>
+
+          <mat-tab-group animationDuration="0ms" *ngIf="!testResult.errorMessage">
+            <mat-tab label="Response Body">
+              <pre class="response-body">{{ formatJson(testResult.responseBody) }}</pre>
+            </mat-tab>
+            <mat-tab label="Response Headers" *ngIf="testResult.responseHeaders">
+              <pre class="response-headers">{{ testResult.responseHeaders | json }}</pre>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div *ngIf="previousResults.length > 0" class="previous-results">
+      <h2>Previous Results</h2>
+      <mat-card *ngFor="let result of previousResults" class="result-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-chip [color]="getStatusColor(result.status)" selected>
+              {{ result.status }}
+            </mat-chip>
+            <span *ngIf="result.responseStatusCode" class="status-code">
+              Status: {{ result.responseStatusCode }}
+            </span>
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ result.createdAt | date:'medium' }}
+            <span *ngIf="result.executionTimeMs"> • {{ result.executionTimeMs }} ms</span>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content *ngIf="result.errorMessage">
+          <div class="error-message">
+            <strong>Error:</strong> {{ result.errorMessage }}
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button (click)="result.showDetails = !result.showDetails">
+            {{ result.showDetails ? 'Hide Details' : 'Show Details' }}
+          </button>
+        </mat-card-actions>
+        <mat-card-content *ngIf="result.showDetails">
+          <mat-tab-group animationDuration="0ms" *ngIf="!result.errorMessage">
+            <mat-tab label="Response Body">
+              <pre class="response-body">{{ formatJson(result.responseBody) }}</pre>
+            </mat-tab>
+            <mat-tab label="Response Headers" *ngIf="result.responseHeaders">
+              <pre class="response-headers">{{ result.responseHeaders | json }}</pre>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</div>
+

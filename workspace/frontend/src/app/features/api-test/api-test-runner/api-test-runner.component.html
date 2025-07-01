@@ -1,0 +1,95 @@
+<div class="api-tester-container" [formGroup]="requestForm">
+  <div class="header-actions">
+    <h1>Manual API Test Runner</h1>
+    <button mat-button (click)="navigateToTests()">
+      <mat-icon>arrow_back</mat-icon> Back to Tests
+    </button>
+  </div>
+
+  <div class="request-bar">
+    <mat-form-field appearance="outline" class="method-select">
+      <mat-label>Method</mat-label>
+      <mat-select formControlName="method">
+        <mat-option *ngFor="let method of httpMethods" [value]="method">
+          {{ method }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="url-input">
+      <mat-label>URL</mat-label>
+      <input matInput formControlName="url" placeholder="Enter request URL">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="sendRequest()" [disabled]="isLoading" class="send-button">
+      <mat-icon>send</mat-icon> Send
+    </button>
+  </div>
+
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab label="Query Params">
+      <div formArrayName="queryParams" class="params-headers-table">
+        <div *ngFor="let param of queryParams.controls; let i=index" [formGroupName]="i" class="table-row">
+          <mat-form-field appearance="outline" class="key-input">
+            <input matInput formControlName="key" placeholder="Key">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="value-input">
+            <input matInput formControlName="value" placeholder="Value">
+          </mat-form-field>
+          <button mat-icon-button (click)="removeQueryParam(i)" aria-label="Remove query parameter">
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </div>
+        <button mat-stroked-button (click)="addQueryParam()">
+          <mat-icon>add</mat-icon> Add Query Param
+        </button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Headers">
+      <div formArrayName="headers" class="params-headers-table">
+        <div *ngFor="let header of headers.controls; let i=index" [formGroupName]="i" class="table-row">
+          <mat-form-field appearance="outline" class="key-input">
+            <input matInput formControlName="key" placeholder="Key">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="value-input">
+            <input matInput formControlName="value" placeholder="Value">
+          </mat-form-field>
+          <button mat-icon-button (click)="removeHeader(i)" aria-label="Remove header">
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </div>
+        <button mat-stroked-button (click)="addHeader()">
+          <mat-icon>add</mat-icon> Add Header
+        </button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Body">
+      <mat-form-field appearance="outline" class="body-textarea">
+        <mat-label>Request Body (JSON)</mat-label>
+        <textarea matInput formControlName="body" rows="10" placeholder="Enter JSON body"></textarea>
+      </mat-form-field>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="30"></mat-spinner>
+    <span>Sending request...</span>
+  </div>
+
+  <div class="response-section" *ngIf="requestForm.get('responseStatus')?.value">
+    <h2>Response</h2>
+    <div><strong>Status:</strong> {{ requestForm.get('responseStatus')?.value }}</div>
+
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="Body">
+        <pre class="response-body">{{ requestForm.get('responseBody')?.value }}</pre>
+      </mat-tab>
+      <mat-tab label="Headers">
+        <pre class="response-body">{{ requestForm.get('responseHeaders')?.value }}</pre>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+

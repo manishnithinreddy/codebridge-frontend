@@ -1,0 +1,107 @@
+<div class="git-manager-container">
+  <mat-toolbar color="accent">
+    <span>Git Repository Management</span>
+    <span class="spacer"></span>
+    <button mat-icon-button aria-label="Add Git Repository" matTooltip="Add new repository (Not implemented)">
+      <mat-icon>add_circle_outline</mat-icon>
+    </button>
+    <button mat-icon-button (click)="loadRepositories()" aria-label="Refresh repositories" matTooltip="Refresh repositories">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="content-area">
+    <div *ngIf="isLoadingRepos" class="loading-indicator full-width-spinner">
+        <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner> Loading repositories...
+    </div>
+    <div *ngIf="errorRepos" class="error-indicator full-width-error">{{errorRepos}}</div>
+
+    <ng-container *ngIf="!isLoadingRepos && !errorRepos && (repositories$ | async) as repos">
+      <div class="repo-selection" *ngIf="repos.length > 0">
+        <mat-form-field appearance="outline">
+          <mat-label>Select Repository</mat-label>
+          <!-- Bind [value] to selectedRepository for programmatic selection to reflect -->
+          <mat-select (selectionChange)="onRepositorySelectionChange($event.value)" [value]="selectedRepository">
+            <mat-option *ngFor="let repo of repos" [value]="repo">
+              {{repo.provider}}: {{repo.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="selectedRepository" class="repo-details">
+        <h2>{{selectedRepository.name}} <span class="repo-provider">({{selectedRepository.provider}})</span></h2>
+        <p class="repo-meta">
+            Default Branch: <strong>{{selectedRepository.defaultBranch}}</strong> |
+            <a [href]="selectedRepository.webUrl || selectedRepository.httpUrl" target="_blank" matTooltip="Open repository web URL">
+                View on {{selectedRepository.provider}} <mat-icon inline>open_in_new</mat-icon>
+            </a>
+        </p>
+        <p *ngIf="selectedRepository.description">{{selectedRepository.description}}</p>
+        <p *ngIf="selectedRepository.lastActivityAt">Last Activity: {{selectedRepository.lastActivityAt | date:'medium'}}</p>
+
+        <div *ngIf="isLoadingRepoDetails" class="loading-indicator">
+            <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner> Loading details...
+        </div>
+        <div *ngIf="errorRepoDetails" class="error-indicator">{{errorRepoDetails}}</div>
+
+        <mat-tab-group animationDuration="0ms" *ngIf="!isLoadingRepoDetails && !errorRepoDetails">
+          <mat-tab label="Commits ({{(commits$ | async)?.length || 0}})">
+            <div class="tab-content-padding">
+              <mat-list *ngIf="(commits$ | async) as commits">
+                <mat-list-item *ngFor="let commit of commits" class="commit-item">
+                  <mat-icon matListItemIcon>commit</mat-icon>
+                  <div matListItemTitle class="commit-message">{{commit.message}}</div>
+                  <div matListItemLine>
+                    <span class="commit-sha" matTooltip="{{commit.sha}}">{{commit.shortSha || (commit.sha | slice:0:7)}}</span>
+                    by <strong>{{commit.authorName}}</strong> on {{commit.authoredDate | date:'short'}}
+                  </div>
+                  <button mat-icon-button matListItemMeta (click)="viewCommitDetails(commit.sha)" aria-label="View commit details" matTooltip="View commit details (Not implemented)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </mat-list-item>
+                <p *ngIf="commits.length === 0" class="empty-message-tab">No commits found for the selected repository/branch.</p>
+              </mat-list>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Branches ({{(branches$ | async)?.length || 0}})">
+             <div class="tab-content-padding">
+              <button mat-stroked-button color="primary" (click)="createBranch()" class="action-button" matTooltip="Create new branch (Not implemented)">Create Branch</button>
+              <mat-list *ngIf="(branches$ | async) as branches">
+                <mat-list-item *ngFor="let branch of branches">
+                  <mat-icon matListItemIcon>call_split</mat-icon>
+                  <div matListItemTitle>{{branch.name}} <mat-icon *ngIf="branch.protected" class="protected-icon" matTooltip="Protected Branch">lock</mat-icon></div>
+                  <div matListItemLine>Last SHA: <span class="commit-sha" matTooltip="{{branch.lastCommitSha}}">{{branch.lastCommitSha | slice:0:7}}</span></div>
+                   <a mat-icon-button matListItemMeta [href]="branch.webUrl" target="_blank" *ngIf="branch.webUrl" aria-label="View branch" matTooltip="View branch on provider">
+                    <mat-icon>open_in_new</mat-icon>
+                  </a>
+                </mat-list-item>
+                 <p *ngIf="branches.length === 0" class="empty-message-tab">No branches found.</p>
+              </mat-list>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Merge Requests ({{(mergeRequests$ | async)?.length || 0}})">
+            <div class="tab-content-padding">
+              <button mat-stroked-button color="primary" (click)="createMergeRequest()" class="action-button" matTooltip="Create new merge request (Not implemented)">Create Merge Request</button>
+              <mat-list *ngIf="(mergeRequests$ | async) as mrs">
+                <mat-list-item *ngFor="let mr of mrs">
+                   <mat-icon matListItemIcon [ngClass]="'mr-status-' + mr.status">{{mr.status === 'merged' ? 'done_all' : (mr.status === 'closed' ? 'highlight_off' : 'hourglass_empty')}}</mat-icon>
+                  <div matListItemTitle>#{{mr.id || mr.iid}} {{mr.title}}</div>
+                  <div matListItemLine>{{mr.sourceBranch}} &rarr; {{mr.targetBranch}} by {{mr.authorUsername}} (Status: {{mr.status}})</div>
+                  <a mat-icon-button matListItemMeta [href]="mr.webUrl" target="_blank" *ngIf="mr.webUrl" aria-label="View merge request" matTooltip="View merge request on provider">
+                    <mat-icon>open_in_new</mat-icon>
+                  </a>
+                </mat-list-item>
+                <p *ngIf="mrs.length === 0" class="empty-message-tab">No merge requests found.</p>
+              </mat-list>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+      <p *ngIf="repos.length === 0 && !isLoadingRepos && !errorRepos" class="empty-message full-width-error">No repositories configured or found.</p>
+      <p *ngIf="repos.length > 0 && !selectedRepository && !isLoadingRepos" class="empty-message full-width-error">Select a repository to view details.</p>
+    </ng-container>
+  </div>
+</div>

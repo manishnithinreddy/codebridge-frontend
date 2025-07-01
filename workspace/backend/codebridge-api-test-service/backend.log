@@ -1,0 +1,63 @@
+[[1;34mINFO[m] Scanning for projects...
+[[1;31mERROR[m] [ERROR] Some problems were encountered while processing the POMs:
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 183, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 179, column 21
+[ERROR] 'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-web:jar is missing. @ line 27, column 21
+[ERROR] 'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-data-jpa:jar is missing. @ line 31, column 21
+[ERROR] 'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-security:jar is missing. @ line 35, column 21
+[ERROR] 'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-validation:jar is missing. @ line 39, column 21
+[ERROR] 'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-actuator:jar is missing. @ line 43, column 21
+[ERROR] 'dependencies.dependency.version' for org.springframework.boot:spring-boot-configuration-processor:jar is missing. @ line 47, column 21
+[ERROR] 'dependencies.dependency.version' for org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:jar is missing. @ line 54, column 21
+[ERROR] 'dependencies.dependency.version' for io.github.resilience4j:resilience4j-spring-boot3:jar is missing. @ line 60, column 21
+[ERROR] 'dependencies.dependency.version' for io.github.resilience4j:resilience4j-circuitbreaker:jar is missing. @ line 64, column 21
+[ERROR] 'dependencies.dependency.version' for io.github.resilience4j:resilience4j-timelimiter:jar is missing. @ line 68, column 21
+[ERROR] 'dependencies.dependency.version' for io.micrometer:micrometer-tracing:jar is missing. @ line 74, column 21
+[ERROR] 'dependencies.dependency.version' for io.micrometer:micrometer-tracing-bridge-brave:jar is missing. @ line 78, column 21
+[ERROR] 'dependencies.dependency.version' for org.postgresql:postgresql:jar is missing. @ line 84, column 21
+[ERROR] 'dependencies.dependency.version' for org.flywaydb:flyway-core:jar is missing. @ line 89, column 21
+[ERROR] 'dependencies.dependency.version' for org.projectlombok:lombok:jar is missing. @ line 119, column 21
+[ERROR] 'dependencies.dependency.version' for org.mapstruct:mapstruct:jar is missing. @ line 126, column 21
+[ERROR] 'dependencies.dependency.version' for io.jsonwebtoken:jjwt-api:jar is missing. @ line 132, column 21
+[ERROR] 'dependencies.dependency.version' for io.jsonwebtoken:jjwt-impl:jar is missing. @ line 136, column 21
+[ERROR] 'dependencies.dependency.version' for io.jsonwebtoken:jjwt-jackson:jar is missing. @ line 141, column 21
+[ERROR] 'dependencies.dependency.version' for org.springdoc:springdoc-openapi-starter-webmvc-ui:jar must be a valid version but is '${springdoc.version}'. @ line 151, column 22
+[ERROR] 'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-test:jar is missing. @ line 155, column 21
+[ERROR] 'dependencies.dependency.version' for org.springframework.security:spring-security-test:jar is missing. @ line 160, column 21
+[ERROR] 'dependencies.dependency.version' for org.testcontainers:postgresql:jar is missing. @ line 165, column 21
+[ERROR] 'dependencies.dependency.version' for org.testcontainers:junit-jupiter:jar is missing. @ line 170, column 21
+ @ 
+[[1;31mERROR[m] The build could not read 1 project -> [1m[Help 1][m
+[[1;31mERROR[m]   
+[[1;31mERROR[m]   The project com.codebridge:codebridge-api-test-service:1.0.0-SNAPSHOT (/tmp/manishnithinreddy/codebridge-frontend/workspace/backend/codebridge-api-test-service/pom.xml) has 24 errors
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-web:jar is missing. @ line 27, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-data-jpa:jar is missing. @ line 31, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-security:jar is missing. @ line 35, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-validation:jar is missing. @ line 39, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-actuator:jar is missing. @ line 43, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.boot:spring-boot-configuration-processor:jar is missing. @ line 47, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:jar is missing. @ line 54, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for io.github.resilience4j:resilience4j-spring-boot3:jar is missing. @ line 60, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for io.github.resilience4j:resilience4j-circuitbreaker:jar is missing. @ line 64, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for io.github.resilience4j:resilience4j-timelimiter:jar is missing. @ line 68, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for io.micrometer:micrometer-tracing:jar is missing. @ line 74, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for io.micrometer:micrometer-tracing-bridge-brave:jar is missing. @ line 78, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.postgresql:postgresql:jar is missing. @ line 84, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.flywaydb:flyway-core:jar is missing. @ line 89, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.projectlombok:lombok:jar is missing. @ line 119, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.mapstruct:mapstruct:jar is missing. @ line 126, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for io.jsonwebtoken:jjwt-api:jar is missing. @ line 132, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for io.jsonwebtoken:jjwt-impl:jar is missing. @ line 136, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for io.jsonwebtoken:jjwt-jackson:jar is missing. @ line 141, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springdoc:springdoc-openapi-starter-webmvc-ui:jar must be a valid version but is '${springdoc.version}'. @ line 151, column 22
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.boot:spring-boot-starter-test:jar is missing. @ line 155, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.springframework.security:spring-security-test:jar is missing. @ line 160, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.testcontainers:postgresql:jar is missing. @ line 165, column 21
+[[1;31mERROR[m]     'dependencies.dependency.version' for org.testcontainers:junit-jupiter:jar is missing. @ line 170, column 21
+[[1;31mERROR[m] 
+[[1;31mERROR[m] To see the full stack trace of the errors, re-run Maven with the [1m-e[m switch.
+[[1;31mERROR[m] Re-run Maven using the [1m-X[m switch to enable full debug logging.
+[[1;31mERROR[m] 
+[[1;31mERROR[m] For more information about the errors and possible solutions, please read the following articles:
+[[1;31mERROR[m] [1m[Help 1][m http://cwiki.apache.org/confluence/display/MAVEN/ProjectBuildingException
+[0m[0m

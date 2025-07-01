@@ -1,0 +1,48 @@
+.git-manager-container { }
+.content-area { padding: 20px; }
+.repo-selection { margin-bottom: 20px; mat-form-field { width: 100%; max-width: 500px; } }
+.repo-details { h2 { margin-bottom: 8px; } p { margin-bottom: 16px; font-size: 0.9em; color: #555; } }
+.tab-content-padding { padding: 20px 0; }
+.mat-list-item .mat-icon { margin-right: 8px; } /* Ensure correct class for list item icon */
+.empty-message, .loading-message { text-align: center; font-style: italic; padding: 20px; }
+.spacer { flex: 1 1 auto; }
+mat-list-item button[matListItemMeta] { margin-left: auto; }
+
+.loading-indicator, .error-indicator, .empty-message, .empty-message-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-style: italic;
+  gap: 10px;
+}
+.full-width-spinner, .full-width-error {
+    grid-column: 1 / -1;
+    width: 100%;
+}
+.error-indicator { color: red; }
+.empty-message-tab { padding: 10px 0; justify-content: flex-start;}
+.spacer { flex: 1 1 auto; }
+
+.repo-meta {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 10px;
+  a {
+    text-decoration: none;
+    color: #3f51b5;
+    &:hover { text-decoration: underline; }
+    mat-icon { font-size: 1em; vertical-align: middle; }
+  }
+}
+.repo-provider { font-size: 0.8em; font-style: italic; color: #777; }
+.commit-item { border-bottom: 1px solid #eee; &:last-child { border-bottom: none; } }
+.commit-message { font-weight: 500; }
+.commit-sha { font-family: monospace; background-color: #f0f0f0; padding: 2px 4px; border-radius: 3px; font-size: 0.85em; }
+.protected-icon { font-size: 1em; vertical-align: middle; color: orange; margin-left: 4px; }
+.action-button { margin-bottom: 15px; }
+.mr-status-open { color: green; }
+.mr-status-merged { color: purple; }
+.mr-status-closed { color: red; }
+.mr-status-locked { color: gray; }
+mat-list-item button[matListItemMeta] a[mat-icon-button] { margin-left: auto; }

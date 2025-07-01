@@ -1,0 +1,132 @@
+<div class="environment-form-container">
+  <div class="header-container">
+    <div class="header-left">
+      <button mat-icon-button [routerLink]="['/environments']">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ isEditMode ? 'Edit' : 'Create' }} Environment</h1>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading environment...</p>
+    </div>
+
+    <div *ngIf="error" class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <h3>Error</h3>
+      <p>{{ errorMessage }}</p>
+      <button mat-raised-button color="primary" (click)="onCancel()">Go Back</button>
+    </div>
+
+    <mat-card *ngIf="!loading && !error">
+      <mat-card-content>
+        <form [formGroup]="environmentForm" (ngSubmit)="onSubmit()">
+          <div class="form-field full-width">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" placeholder="Enter environment name" required>
+              <mat-error *ngIf="environmentForm.get('name')?.hasError('required')">
+                Name is required
+              </mat-error>
+              <mat-error *ngIf="environmentForm.get('name')?.hasError('maxlength')">
+                Name cannot exceed 100 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field full-width">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea 
+                matInput 
+                formControlName="description" 
+                placeholder="Enter environment description"
+                rows="3">
+              </textarea>
+              <mat-error *ngIf="environmentForm.get('description')?.hasError('maxlength')">
+                Description cannot exceed 500 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-slide-toggle formControlName="isDefault" color="primary">
+              Set as default environment
+            </mat-slide-toggle>
+          </div>
+
+          <div class="variables-container">
+            <div class="variables-header">
+              <h3>Variables</h3>
+              <button 
+                mat-mini-fab 
+                color="primary" 
+                type="button" 
+                (click)="addVariable()" 
+                aria-label="Add variable">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+
+            <div class="variables-list" formArrayName="variables">
+              <div *ngIf="variables.length === 0" class="empty-variables">
+                <p>No variables added yet. Click the + button to add a variable.</p>
+              </div>
+
+              <div 
+                *ngFor="let variable of variables.controls; let i = index" 
+                [formGroupName]="i"
+                class="variable-item">
+                <mat-form-field appearance="outline">
+                  <mat-label>Key</mat-label>
+                  <input matInput formControlName="key" placeholder="Variable key" required>
+                  <mat-error *ngIf="variable.get('key')?.hasError('required')">
+                    Key is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Value</mat-label>
+                  <input matInput formControlName="value" placeholder="Variable value" required>
+                  <mat-error *ngIf="variable.get('value')?.hasError('required')">
+                    Value is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Description</mat-label>
+                  <input matInput formControlName="description" placeholder="Optional description">
+                </mat-form-field>
+
+                <button 
+                  mat-icon-button 
+                  color="warn" 
+                  type="button" 
+                  (click)="removeVariable(i)"
+                  aria-label="Remove variable">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="onCancel()">Cancel</button>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              type="submit" 
+              [disabled]="environmentForm.invalid || submitting">
+              <mat-spinner diameter="20" *ngIf="submitting"></mat-spinner>
+              <span *ngIf="!submitting">{{ isEditMode ? 'Update' : 'Create' }}</span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

@@ -1,0 +1,31 @@
+
+> codebridge-frontend@0.0.0 start
+> ng serve
+
+❯ Building...
+✔ Building...
+Initial chunk files | Names                       |  Raw size
+styles.css          | styles                      | 103.09 kB | 
+main.js             | main                        |  12.27 kB | 
+chunk-SG2LYVAH.js   | -                           | 894 bytes | 
+polyfills.js        | polyfills                   |  95 bytes | 
+
+                    | Initial total               | 116.35 kB
+
+Lazy chunk files    | Names                       |  Raw size
+chunk-E5TSVCQB.js   | environment-routes          |  71.04 kB | 
+chunk-IQQC4WHL.js   | collection-routes           |  70.61 kB | 
+chunk-HKAAI5JY.js   | docker-containers-component |  50.67 kB | 
+chunk-5TLDYVOV.js   | project-routes              |  47.45 kB | 
+chunk-IH7A73XL.js   | dashboard-component         |  31.48 kB | 
+chunk-AB5PGRTA.js   | -                           |  28.08 kB | 
+chunk-64JI3ZI2.js   | login-component             |  15.52 kB | 
+chunk-VJODHAVK.js   | -                           |  13.71 kB | 
+chunk-BU4UJSAO.js   | -                           |   2.91 kB | 
+chunk-LG3WBQGD.js   | -                           | 226 bytes | 
+
+Application bundle generation complete. [5.954 seconds]
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  ➜  Local:   http://localhost:4200/

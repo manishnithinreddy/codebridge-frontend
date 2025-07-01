@@ -1,0 +1,61 @@
+.api-test-form-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.method-select {
+  width: 150px;
+}
+
+.url-input {
+  flex: 1;
+}
+
+.timeout-input {
+  width: 200px;
+}
+
+.params-headers-table {
+  padding: 16px 0;
+}
+
+.table-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.key-input, .value-input {
+  flex: 1;
+}
+
+.body-textarea {
+  width: 100%;
+  margin: 16px 0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
