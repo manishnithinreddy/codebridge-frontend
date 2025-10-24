@@ -1,0 +1,35 @@
+.api-test-list-container {
+  padding: 20px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0;
+}
+
+.no-tests {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.no-tests p {
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+}
+

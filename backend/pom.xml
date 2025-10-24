@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.codebridge</groupId>
+    <artifactId>codebridge-platform</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>CodeBridge Platform</name>
+    <description>A comprehensive development platform that integrates various development tools and services</description>
+
+    <modules>
+        <module>codebridge-common</module>
+        <module>codebridge-core</module>
+        <module>codebridge-security</module>
+        <module>codebridge-gateway-service</module>
+        <module>codebridge-gitlab-service</module>
+        <module>codebridge-docker-service</module>
+        <module>codebridge-documentation-service</module>
+        <module>codebridge-server-service</module>
+        <module>codebridge-teams-service</module>
+        <module>codebridge-api-test-service</module>
+        <module>codebridge-monitoring-service</module>
+    </modules>
+</project>

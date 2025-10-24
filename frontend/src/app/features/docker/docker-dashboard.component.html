@@ -1,0 +1,105 @@
+<div class="docker-dashboard-container">
+  <mat-toolbar color="accent">
+    <span>Docker Management</span>
+    <span class="spacer"></span>
+    <button mat-icon-button aria-label="Add Docker Registry" (click)="addRegistry()">
+      <mat-icon>add_circle_outline</mat-icon>
+    </button>
+     <button mat-icon-button aria-label="Refresh Docker Data" (click)="loadContainers(); loadImages(); loadRegistries()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab label="Containers">
+      <div class="tab-content-padding">
+        <h3>Containers</h3>
+        <div *ngIf="isLoadingContainers" class="loading-indicator"><mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner> Loading...</div>
+        <div *ngIf="errorContainers" class="error-indicator">{{errorContainers}}</div>
+        <div *ngIf="!isLoadingContainers && !errorContainers && (containers$ | async) as containers">
+          <div *ngIf="containers.length > 0; else noContainers" class="entity-list">
+            <mat-card *ngFor="let c of containers" class="entity-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar
+                  [ngClass]="{'status-running': c.status === 'running', 'status-exited': c.status !== 'running'}">
+                  {{ c.status === 'running' ? 'play_circle_filled' : 'stop_circle' }}
+                </mat-icon>
+                <mat-card-title>{{c.name}}</mat-card-title>
+                <mat-card-subtitle>Image: {{c.image}} | Status: {{c.status}}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <p *ngIf="c.ports && c.ports.length > 0">
+                  Ports:
+                  <mat-chip-set aria-label="Container ports">
+                    <mat-chip *ngFor="let p of c.ports">
+                      {{p.publicPort ? p.publicPort + ':' : ''}}{{p.privatePort}}/{{p.type}}
+                    </mat-chip>
+                  </mat-chip-set>
+                </p>
+                <p *ngIf="c.createdAt">Created: {{c.createdAt | date:'short'}}</p>
+              </mat-card-content>
+              <mat-card-actions align="end">
+                <button mat-icon-button *ngIf="c.status !== 'running'" (click)="startContainer(c.id)" aria-label="Start container"><mat-icon>play_arrow</mat-icon></button>
+                <button mat-icon-button *ngIf="c.status === 'running'" (click)="stopContainer(c.id)" aria-label="Stop container"><mat-icon>stop</mat-icon></button>
+                <button mat-icon-button (click)="viewContainerLogs(c.id)" aria-label="View logs"><mat-icon>article</mat-icon></button>
+                <button mat-icon-button color="warn" (click)="removeContainer(c.id)" aria-label="Remove container"><mat-icon>delete</mat-icon></button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+          <ng-template #noContainers><p class="empty-message">No containers found.</p></ng-template>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Images">
+      <div class="tab-content-padding">
+        <h3>Images</h3>
+        <div *ngIf="isLoadingImages" class="loading-indicator"><mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner> Loading...</div>
+        <div *ngIf="errorImages" class="error-indicator">{{errorImages}}</div>
+        <div *ngIf="!isLoadingImages && !errorImages && (images$ | async) as images">
+          <div *ngIf="images.length > 0; else noImages" class="entity-list">
+            <mat-card *ngFor="let img of images" class="entity-card">
+              <mat-card-header>
+                 <mat-icon mat-card-avatar>layers</mat-icon>
+                <mat-card-title>{{img.repository}}:{{img.tag}}</mat-card-title>
+                <mat-card-subtitle>ID: {{img.id | slice:0:12}} | Size: {{img.size}}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                 <p *ngIf="img.createdAt">Created: {{img.createdAt | date:'shortDate'}}</p>
+              </mat-card-content>
+              <mat-card-actions align="end">
+                <button mat-icon-button color="warn" (click)="removeImage(img.id)" aria-label="Remove image"><mat-icon>delete</mat-icon></button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+          <ng-template #noImages><p class="empty-message">No local images found.</p></ng-template>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Registries">
+      <div class="tab-content-padding">
+        <h3>Registries</h3>
+        <div *ngIf="isLoadingRegistries" class="loading-indicator"><mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner> Loading...</div>
+        <div *ngIf="errorRegistries" class="error-indicator">{{errorRegistries}}</div>
+        <div *ngIf="!isLoadingRegistries && !errorRegistries && (registries$ | async) as registries">
+          <div *ngIf="registries.length > 0; else noRegistries" class="entity-list">
+             <mat-card *ngFor="let reg of registries" class="entity-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar [color]="reg.isConnected ? 'primary' : 'disabled'">
+                  {{ reg.isConnected ? 'cloud_done' : 'cloud_off' }}
+                </mat-icon>
+                <mat-card-title>{{reg.name}}</mat-card-title>
+                <mat-card-subtitle>{{reg.url}} {{reg.username ? '('+reg.username+')' : ''}}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-actions align="end">
+                <button mat-button *ngIf="!reg.isConnected" (click)="connectRegistry(reg.id)">Connect</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+          <ng-template #noRegistries><p class="empty-message">No registries configured.</p></ng-template>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
